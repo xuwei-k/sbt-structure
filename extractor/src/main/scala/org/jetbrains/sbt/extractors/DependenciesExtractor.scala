@@ -100,11 +100,19 @@ class DependenciesExtractor(unmanagedClasspath: SbtConfiguration => Keys.Classpa
     }
 
   private def forAllConfigurations[T](fn: SbtConfiguration => Seq[T]): Seq[(T, Seq[Configuration])] = {
-    dependencyConfigurations
-      .flatMap(conf => fn(conf).map(it => (it, conf)))
-      .groupBy(_._1)
-      .mapValues(_.unzip._2.map(c => Configuration(c.name)))
-      .toSeq
+    def groupByOrdered(pairs: Seq[(T, Configuration)]): Seq[(T, Seq[Configuration])] = {
+      val result = mutable.LinkedHashMap.empty[T, Seq[Configuration]]
+      pairs.foreach { case (t, conf) =>
+        val confs = result.getOrElse(t, Seq.empty)
+        result.update(t, confs :+ conf)
+      }
+      result.toSeq
+    }
+
+    groupByOrdered(
+      dependencyConfigurations
+        .flatMap(conf => fn(conf).map(it => (it, Configuration(conf.name))))
+    )
   }
 
   /**
