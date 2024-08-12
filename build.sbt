@@ -4,6 +4,8 @@ ThisBuild / organization := "org.jetbrains.scala"
 ThisBuild / homepage := Some(url("https://github.com/JetBrains/sbt-structure"))
 ThisBuild / licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0"))
 
+ThisBuild / version := "2024.2.4-SNAPSHOT"
+
 lazy val sonatypeSettings = Seq(
   sonatypeProfileName := "org.jetbrains",
   sonatypeProjectHosting := Some(GitHubHosting("JetBrains", "sbt-structure", "scala-developers@jetbrains.com"))
