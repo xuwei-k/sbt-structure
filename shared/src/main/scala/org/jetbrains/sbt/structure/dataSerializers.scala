@@ -357,7 +357,7 @@ trait DataSerializers {
   implicit val repositoryDataSerializer: XmlSerializer[RepositoryData] = new XmlSerializer[RepositoryData] {
     override def serialize(what: RepositoryData): Elem =
       <repository>
-        {what.modules.map(_.serialize)}
+        {what.modules.sortBy(_.id.key).map(_.serialize)}
       </repository>
 
     override def deserialize(what: Node): Either[Throwable,RepositoryData] = {
@@ -483,7 +483,7 @@ trait DataSerializers {
         {what.java.map(_.serialize).toSeq}
         {what.scala.map(_.serialize).toSeq}
         <compileOrder>{what.compileOrder}</compileOrder>
-        {what.configurations.map(_.serialize)}
+        {what.configurations.sortBy(_.id).map(_.serialize)}
         {what.dependencies.serialize}
         {what.resolvers.map(_.serialize).toSeq}
         {what.play2.map(_.serialize).toSeq}
@@ -531,8 +531,8 @@ trait DataSerializers {
   implicit val structureDataSerializer: XmlSerializer[StructureData] = new XmlSerializer[StructureData] {
     override def serialize(what: StructureData): Elem =
       <structure sbt={what.sbtVersion}>
-        {what.builds.map(_.serialize)}
-        {what.projects.map(project => project.serialize)}
+        {what.builds.sortBy(_.uri).map(_.serialize)}
+        {what.projects.sortBy(_.base).map(project => project.serialize)}
         {what.repository.map(_.serialize).toSeq}
         {what.localCachePath.map(path => <localCachePath>{path.path}</localCachePath>).toSeq}
       </structure>
