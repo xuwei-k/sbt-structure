@@ -22,7 +22,7 @@ object XmlSerializer {
     def deserialize[T](implicit serializer: XmlSerializer[T]): Seq[T] =
       nodeSeq.flatMap(_.deserialize[T].fold(_ => None, x => Some(x)))
 
-    def deserializeOne[T](implicit serializer: XmlSerializer[T], manifest: Manifest[T]): Either[Throwable,T] = {
+    def deserializeOne[T](implicit serializer: XmlSerializer[T], manifest: reflect.ClassTag[T]): Either[Throwable,T] = {
       val ts = nodeSeq.map(_.deserialize[T]).collect { case Right(t) => t }
       if (ts.isEmpty)
         Left(new Error("None of " + manifest.erasure.getSimpleName + " is found in " + nodeSeq))

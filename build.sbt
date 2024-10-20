@@ -39,7 +39,7 @@ lazy val core = project.in(file("core"))
         case Some((2, 11)) =>
           Seq("org.scala-lang.modules" %% "scala-xml" % "1.3.0")
         case _ =>
-          Seq.empty
+          Seq("org.scala-lang.modules" %% "scala-xml" % "2.3.0")
       }
     },
     crossScalaVersions := Seq("2.13.10", scala212, "2.11.12", scala210),
@@ -82,7 +82,7 @@ lazy val extractor = project.in(file("extractor"))
       else if (scalaVer == scala212)
         SbtVersion_1_3
       else
-        throw new AssertionError(s"Unexpected scala version $scalaVer")
+        "2.0.0-M2"
     },
     //By default when you crosscompile sbt plugin for multiple sbt 1.x versions it will use same binary version 1.0 for all of them
     //It will use the same source directory `scala-sbt-1.0`, same target dirs, same artifact names
